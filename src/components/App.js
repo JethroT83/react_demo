@@ -18,53 +18,18 @@ import Wind from "./Wind";
 import moment from 'moment-timezone';
 
 import '../styles/App.css';
-//import Bootstrap from 'react-bootstrap';
-
-/*
-
-const searchReducer = (state={}, action) => {
-//console.log(state);
-console.log(action);
-	switch(action.type){
-
-		case "q":
-			state = {...state,q:action.q}
-			return state;
-
-		case 'SEARCH':
-			state ={...state,
-				weather: action.search.weather[0].description,
-				temp:action.search.main,
-				sun:action.search.sys,
-				coord:action.search.coord,
-				wind:action.search.wind
-			};
-			return state;
-
-		default:
-			return state;
-
-	}
-}
 
 
-const reducers = combineReducers({
-	search:searchReducer
-});
- //{ search: {weather:"",temp:"",sun:"",coord:"",wind:""} }
-const store = createStore(reducers);
-*/
 
-connect((store)=>{
-	return{
-		search:store.search
-	}
-})
+//Actions
+import {getWeather} from '../actions/weather.js';
+
 class App extends Component {
 
 	constructor(props){
 		super(props);
 console.log(this.props);
+//console.log(this.getStore());
 		this.state = {
 			q: "",
 			weather:"",
@@ -91,13 +56,15 @@ console.log(this.props);
 		this.getTemperature	= this.getTemperature.bind(this);
 		this.getSunRiseSet	= this.getSunRiseSet.bind(this);
 		//this.getWind		= this.getWind.bind(this);
-		this.changeBackground= this.changeBackground.bind(this);	
+		this.changeBackground= this.changeBackground.bind(this);
+
+		this.handleGetWeather=this.handleGetWeather.bind(this);
 	}
 
 	getWeather(evt){
-		/*store.dispatch({
-			type:"q",q:evt.target.value
-		})*/
+		//store.dispatch({
+			//type:"q",q:evt.target.value
+		//})
 
 		this.setState({
 			q:evt.target.value
@@ -111,7 +78,7 @@ console.log(this.props);
 				.then(result=>result.json())
 				.then(result=> {
 					this.fetching = false;
-//console.log(result);
+					//console.log(result);
 					if(result.cod === 200){
 
 						//store.dispatch({
@@ -134,6 +101,18 @@ console.log(this.props);
 
 				});
 		}
+	}
+
+	handleGetWeather(evt){
+
+		this.setState({
+			q:evt.target.value
+		});
+//console.log(this.props.dispatch())
+		//getWeather(evt.target.value)
+		this.props.dispatch(getWeather(evt.target.value));
+
+		console.log(this.props);
 	}
 
 
@@ -232,15 +211,6 @@ console.log(this.props);
 	}
 
 
-	/*getWind(){
-
-		this.windSpeed = this.state.wind.speed;
-		this.windDeg   = this.state.wind.deg;
-		TweenMax.from( $('.homeImg > img'), 0.5,
-		        {css:{scale:0.05, opacity:0, rotation: 180}, 
-		        ease:Quad.easeInOut
-		});
-	}*/
 
 
 	changeBackground(){
@@ -320,7 +290,7 @@ console.log(this.props);
 										<span>Search:</span>
 									</div>
 									<div className='col-xs-6'>
-										<input className='form-control' value={this.state.q/*store.getState().q*/} onChange={this.getWeather}/>
+										<input className='form-control' value={this.state.q/*store.getState().q*/} onChange={this.handleGetWeather}/>
 									</div>
 								</div>
 							</div>
@@ -364,12 +334,7 @@ console.log(this.props);
     }
 }
 
-/*<Wind wind={this.state.wind}/>
-								<div className="col-xs-6">
-									<span style={this.fontStyle} >Wind: {this.windSpeed}</span>
-								</div>
-								<div className="col-xs-6">
-									<span style={this.fontStyle} >Direction: {this.windDirection}</span>
-								</div>
-*/
-export default App;
+
+
+export default connect((store)=>{return {weather:store.weatherReducer};})(App);
+//export default App;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import arrow from '../assets/arrow.jpg';
 //import {TweenMax, Power2, TimelineLite} from "gsap";
-import {TweenMax} from "gsap";
+//import {TweenMax} from "gsap";
 //import TweenMax from 'react-gsap-enhancer';
 //import '../styles/Wind.css';
 
@@ -9,7 +9,7 @@ class Wind extends Component {
 
 	constructor(props){
 		super(props);
-		let mixins= LinkedStateMixin;
+
 		this.state = {
 			wind:this.wind
 		};
@@ -24,16 +24,16 @@ console.log("wind is good -- ",this.props);
 	}
 
 	componentDidMount(){
-		let node = this.refs.direction.getDOMnode();
+		//let node = this.refs.direction.getDOMnode();
 
 		/*TweenMax.from( $('.homeImg > img'), 0.5,
 		        {css:{scale:0.05, opacity:0, rotation: 180}, 
 		        ease:Quad.easeInOut
 		});*/
 console.log(this.state.wind);
-		TweenMax.from( node, 0.5,{
+		/*TweenMax.from( node, 0.5,{
 			css:{scale:0.05, opacity:0, rotation: this.state.wind.deg}
-		});
+		});*/
 			//ease:Quad.easeInOut
 			//TweenMax.from( node, 0.5,{css:{scale:0.05, opacity:0, rotation: 100}});
 	}

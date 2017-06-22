@@ -1,9 +1,9 @@
 import {combineReducers} from "redux";
 
 
-import search from "./searchReducer";
+import weatherReducer from "./weatherReducer";
 
 export default combineReducers({
-	search
+	weatherReducer
 });
 
