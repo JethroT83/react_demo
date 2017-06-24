@@ -52,56 +52,15 @@ console.log(this.props);
 		this.location = "";
 
 		this.getLocation    = this.getLocation.bind(this);
-		this.getWeather		= this.getWeather.bind(this);
 		this.getTemperature	= this.getTemperature.bind(this);
 		this.getSunRiseSet	= this.getSunRiseSet.bind(this);
 		//this.getWind		= this.getWind.bind(this);
 		this.changeBackground= this.changeBackground.bind(this);
 
 		this.handleGetWeather=this.handleGetWeather.bind(this);
+
 	}
 
-	getWeather(evt){
-		//store.dispatch({
-			//type:"q",q:evt.target.value
-		//})
-
-		this.setState({
-			q:evt.target.value
-		});
-
-
-		let url = "http://api.openweathermap.org/data/2.5/weather?q="+evt.target.value+"&APPID=c6572f189031f383fca2ba6d67ac690a";
-		if(this.fetching === false){
-			this.fetching = true;
-			return fetch(url) 
-				.then(result=>result.json())
-				.then(result=> {
-					this.fetching = false;
-					//console.log(result);
-					if(result.cod === 200){
-
-						//store.dispatch({
-						//	type:"SEARCH",search:result
-						//})
-
-
-						this.setState({
-							weather: result.weather[0].description,
-							temp:result.main,
-							sun:result.sys,
-							coord:result.coord,
-							wind:result.wind
-						});
-						this.getLocation();
-						this.getTemperature();
-						this.getSunRiseSet();
-						//this.getWind();
-					}
-
-				});
-		}
-	}
 
 	handleGetWeather(evt){
 
@@ -113,13 +72,21 @@ console.log(this.props);
 		this.props.dispatch(getWeather(evt.target.value));
 
 		console.log(this.props);
+
+		this.getLocation();
+		this.getTemperature();
+		this.getSunRiseSet();
 	}
 
 
 	getLocation(){
-//console.log(store.getState());
-		let long = this.state.coord.lon;
-		let lat  = this.state.coord.lat;
+
+		//let long = this.state.coord.lon;
+		//let lat  = this.state.coord.lat;
+
+		let long = this.props.weather.coord.lon;
+		let lat  = this.props.weather.coord.lat;
+
 		let url = "https://maps.googleapis.com/maps/api/geocode/json?address="+lat+"%20"+long+"&key=AIzaSyBtaQ93f1eXlvE8JiUkHF7hsjiJzejUrMQ";
 		return fetch(url) 
 		.then(result=>result.json())
@@ -176,11 +143,11 @@ console.log(this.props);
 	// Temp given in Kelvin  F = 9/5 (K - 273) + 32
 	getTemperature(){	
 
-		this.high 		= Math.round((9/5) * (this.state.temp.temp_max - 273) + 32,1);
-		this.low        = Math.round((9/5) * (this.state.temp.temp_min - 273) + 32,1);
-		this.temp 		= Math.round((9/5) * (this.state.temp.temp - 273) + 32,1);
-		this.humidity 	= this.state.temp.humidity;
-		this.pressure 	= this.state.temp.pressure;
+		this.high 		= Math.round((9/5) * (this.props.weather.temp.temp_max - 273) + 32,1);
+		this.low        = Math.round((9/5) * (this.props.weather.temp.temp_min - 273) + 32,1);
+		this.temp 		= Math.round((9/5) * (this.props.weather.temp.temp - 273) + 32,1);
+		this.humidity 	= this.props.weather.temp.humidity;
+		this.pressure 	= this.props.weather.temp.pressure;
 
 			//console.log("this.temp-->"+this.temp + "---this.high-->"+ this.high + "---this.low--"+ this.low + "---this.humidity--"+ this.humidity + "---pressure--"+ this.pressure);
 	}
@@ -188,8 +155,8 @@ console.log(this.props);
 
 	getSunRiseSet(){
 
-		let long = this.state.coord.lon;
-		let lat  = this.state.coord.lat;
+		let long = this.props.weather.coord.lon;
+		let lat  = this.props.weather.coord.lat;
 		let url = "https://maps.googleapis.com/maps/api/timezone/json?location="+lat+","+long+"&timestamp=1458000000&key=AIzaSyDbapD11ArZHjF38_AbfRgPgnzZz8MXACY";
 
 		return fetch(url)
@@ -200,11 +167,11 @@ console.log(this.props);
 					let timeZone = result.timeZoneId;
 
 					//Get Sunrise time
-					let sr = this.state.sun.sunrise * 1000;
+					let sr = this.props.weather.sun.sunrise * 1000;
 					this.sunrise = moment.tz(sr,timeZone).format('h:mm:ss A');
 
 					//Get Sunset time
-					let ss = this.state.sun.sunset * 1000;
+					let ss = this.props.weather.sun.sunset * 1000;
 					this.sunset = moment.tz(ss,timeZone).format('h:mm:ss A');
 				});
 
@@ -214,9 +181,9 @@ console.log(this.props);
 
 
 	changeBackground(){
-//console.log(this.state.weather)
+console.log(this.props.weather.weather)
 
-		switch(this.state.weather){
+		switch(this.props.weather.weather){
 
 			case "sunny":
 				this.sectionStyle.backgroundImage = `url(${SunnyBackground})`
@@ -267,6 +234,8 @@ console.log(this.props);
 //console.log(this.sectionStyle);
 	}
 							/*<div className='spacer row' />style={'font-size:2em'}*/
+
+
     render(){
     	return(	
     			<div>
@@ -325,7 +294,7 @@ console.log(this.props);
 								</div>
 							</div>
 							<div className='row'>
-								<Wind onChange={this.state.wind} wind={this.state.wind}/>
+								<Wind/>
 							</div>
 				    	</div>
 				    </section>

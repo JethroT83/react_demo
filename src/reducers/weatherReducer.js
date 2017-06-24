@@ -1,4 +1,10 @@
-export default (state={}, action) => {
+export default (state={
+	description:"",
+	temp:"",
+	sun:"",
+	coord:"",
+	wind:{speed:0,deg:0}
+}, action) => {
 //console.log(state);
 console.log(action);
 	switch(action.type){
