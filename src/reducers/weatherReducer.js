@@ -3,21 +3,17 @@ export default (state={
 	temp:"",
 	sun:"",
 	coord:"",
-	wind:{speed:0,deg:0}
+	wind:{speed:0,deg:0},
+	halt:true
 }, action) => {
-//console.log(state);
-console.log(action);
+
 	switch(action.type){
 
-		case "test":
-			return {test:"this shit works"}
-
-		case "q":
-			state = {...state,q:action.q}
-			return state;
+		//case "q":
+			//state = {...state,q:action.q}
+			//return state;
 
 		case 'weather':
-			console.log(action.payload.data);
 			state ={...state,
 				description: action.payload.data.weather[0].description,
 				temp:action.payload.data.main,
@@ -25,9 +21,13 @@ console.log(action);
 				coord:action.payload.data.coord,
 				wind:action.payload.data.wind
 			};
-			console.log(state)
 			return state;
 
+		case 'HALT':
+			state ={...state,
+					halt:action.payload
+				};
+			return state;
 		default:
 			return state;
 
