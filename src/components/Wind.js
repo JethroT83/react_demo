@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from "react-redux";
 import arrow from '../assets/arrow.jpg';
-//import {TweenMax, Power2, TimelineLite} from "gsap";
-//import {TweenMax} from "gsap";
-//import TweenMax from 'react-gsap-enhancer';
-//import '../styles/Wind.css';
+import {TweenLite} from "gsap";
+
 
 class Wind extends Component {
 
-	//constructor(props){
-		//super(props);
+	componentWillReceiveProps(){
 
-		//this.arrowStyle = {}
-	//}
+		let direction = ReactDOM.findDOMNode(this.refs.direction);
+		TweenLite.to(direction, 2, {rotation:this.props.wind.deg});
 
+		console.log(this.props.wind.deg);
+	}
 
 
 	render(){
@@ -22,7 +22,7 @@ class Wind extends Component {
 				<div className="col-xs-6">
 					<span className="font" >Wind: {this.props.wind.speed}</span>
 				</div>
-				<div className="col-xs-6">
+				<div className="col-xs-6" >
 					<img ref="direction" src={arrow} alt='oops'/>
 				</div>
 			</div>
@@ -30,4 +30,4 @@ class Wind extends Component {
 	}
 }
 
-export default connect((store)=>{return {wind:store.weatherReducer.wind};})(Wind);
+export default connect((store)=>{return {wind:store.weatherReducer.wind};})(Wind)

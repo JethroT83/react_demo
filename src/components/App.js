@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 
+//Styles
+import '../styles/App.css';
+
 //Components
 import Wind from "./Wind";
 
@@ -15,6 +18,8 @@ class App extends Component {
 		super(props);
 
 		this.handleGetWeather=this.handleGetWeather.bind(this);
+		this.handleInfo = this.handleInfo.bind(this);
+
 	}
 
 	componentWillMount(){
@@ -43,11 +48,21 @@ class App extends Component {
 
 		//Takes the search and returns the weather from API service
 		this.props.dispatch(getWeather(evt.target.value));
+	}
 
+	componentWillReceiveProps(){
 		if(this.props.weather.halt !== true){
+			this.props.weather.halt = true;
+			this.handleInfo();
+		}
+	}
+
+
+	handleInfo(){
 			// Calls Google API for the location
 			let lat = this.props.weather.coord.lat;
 			let long = this.props.weather.coord.lon;
+
 			this.props.dispatch(getLocation(lat,long));
 
 			// Adjusts Sunrise/Set based on timezone of coordinates
@@ -60,10 +75,8 @@ class App extends Component {
 			this.props.dispatch(getBackground(this.props.weather.description));
 			this.sectionStyle = {...this.sectionStyle,
 									backgroundImage: this.props.info.background};
-		}
 
 	}
-
 
 
     render(){
@@ -81,9 +94,6 @@ class App extends Component {
 								</div>
 							</div>
 							<div className='row'>
-								<br/>
-							</div>
-							<div className='row'>
 								<div className='col-xs-9'>
 									<div className='col-xs-3'>
 										<span>Search:</span>
@@ -94,11 +104,14 @@ class App extends Component {
 								</div>
 							</div>
 							<div className='row'>
-								<br/>
-							</div>
-							<div className='row'>
 								<div className="col-xs-12">
 									<span>Location: {this.props.info.location}</span>
+								</div>
+							</div>
+
+							<div className='row'>
+								<div className='col-xs-12'>
+									<span>Description: {this.props.weather.description}</span>
 								</div>
 							</div>
 

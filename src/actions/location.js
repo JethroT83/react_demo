@@ -1,14 +1,13 @@
 import axios from "axios";
 
 export function getLocation(lat,long){
-
 	return (dispatch)=>{
-
 
 		let url = "https://maps.googleapis.com/maps/api/geocode/json?address="+lat+"%20"+long+"&key=AIzaSyBtaQ93f1eXlvE8JiUkHF7hsjiJzejUrMQ";
 
 		axios.get(url)
 			.then((result) =>{
+
 				if(result.status === 200){
 
 					let addressComponents = result.data.results[0].address_components;
