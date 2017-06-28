@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 
 //Styles
-import '../styles/App.css';
+import '../styles/Style.css';
 
 //Components
 import Wind from "./Wind";
