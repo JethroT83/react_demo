@@ -34,7 +34,8 @@ class App extends Component {
 			backgroundImage: this.props.info.background,
 			color:'#ffffff',
 			fontSize:'2em',
-			'text-shadow': '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black'
+			'text-shadow': '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black',
+			'background-size':'cover'
 		};
 
 	}
@@ -94,13 +95,11 @@ class App extends Component {
 								</div>
 							</div>
 							<div className='row'>
-								<div className='col-xs-9'>
-									<div className='col-xs-3'>
-										<span>Search:</span>
-									</div>
-									<div className='col-xs-6'>
-										<input className='form-control' value={this.state.q} onChange={this.handleGetWeather}/>
-									</div>
+								<div className='col-xs-4'>
+									<span>Search:</span>
+								</div>
+								<div className='col-xs-8'>
+									<input className='form-control' value={this.state.q} onChange={this.handleGetWeather}/>
 								</div>
 							</div>
 							<div className='row'>
